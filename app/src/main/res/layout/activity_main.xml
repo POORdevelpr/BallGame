@@ -13,7 +13,7 @@
         android:text="start"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toTopOf="@id/activity_main_guide_line"
         />
 
     <Button
@@ -46,23 +46,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         />
 
-    <ImageView
-        android:id="@+id/activity_main__background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:src="@color/black"
-        />
-
-    <TextView
-        android:id="@+id/activity_main_text_view"
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/activity_main_guide_line"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="TEXT"
-        android:textSize="34sp"
-        android:textColor="@color/white"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.2"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

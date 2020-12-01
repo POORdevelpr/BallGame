@@ -2,52 +2,103 @@ package com.campper.coursework;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
+import android.content.res.Resources;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+
 import android.util.Log;
-import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
 
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.JsonRequest;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONObject;
-
-import java.util.Random;
+import com.campper.coursework.controller.MediaPlayerController;
 
 public class MainActivity extends AppCompatActivity {
-    private Button button;
-    private RequestQueue requestQueue;
+    private MediaPlayer mediaPlayer;
+
+    private Button buttonStart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        requestQueue = Volley.newRequestQueue(this);
+        startMediaPlayer();
 
-        final TextView textView = findViewById(R.id.activity_main_text_view);
-        button = findViewById(R.id.activity_main__btn_start);
 
-        ParallelTask parallelTask = new ParallelTask(this);
-        parallelTask.doInBackground(button);
+        setupButtons();
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET,
-                "https://jsonplaceholder.typicode.com/todos/1", null,
-                listener -> {
-                    Log.d("JSON: ",""+listener);
-                }, error -> {
-                    Log.d("JSON error: ", error.getMessage());
-        });
+        startGame();
 
-        requestQueue.add(jsonObjectRequest);
+        Log.d("onCreate","OnCreate");
     }
+
+    @Override
+    protected void onResume(){
+        super.onResume();
+
+        startMediaPlayer();
+        Log.d("onREsume:","onResume");
+    }
+
+    @Override
+    protected void onPause(){
+        super.onPause();
+
+        pauseMediaPlayer();
+        Log.d("onPause:","onPause");
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        releaseMediaPlayer();
+        Log.d("onStop:","onStop");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d("onDestroy:","onDestroy");
+
+
+    }
+
+    private void startGame(){
+        buttonStart.setOnClickListener(v -> onStartButtonClick());
+    }
+
+    public void setupButtons(){
+        buttonStart = findViewById(R.id.activity_main__btn_start);
+    }
+
+    private void onStartButtonClick(){
+        Intent intent = new Intent(this, GameActivity.class);
+
+        startActivity(intent);
+    }
+
+    public void startMediaPlayer(){
+        mediaPlayer = MediaPlayer.create(this, R.raw.background);
+        mediaPlayer.start();
+    }
+
+    public void releaseMediaPlayer(){
+        if(mediaPlayer != null){
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
+    }
+
+    public void pauseMediaPlayer(){
+        if(mediaPlayer.isPlaying()) mediaPlayer.pause();
+
+    }
+
 }

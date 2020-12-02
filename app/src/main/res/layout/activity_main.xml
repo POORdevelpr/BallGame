@@ -27,7 +27,7 @@
         />
 
     <Button
-        android:id="@+id/activity_main__btn_volume"
+        android:id="@+id/activity_main__btn_music_off"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Mute"
@@ -37,12 +37,12 @@
         />
 
     <Button
-        android:id="@+id/activity_main__btn_music"
+        android:id="@+id/activity_main__btn_music_on"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Music"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/activity_main__btn_volume"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main__btn_music_off"
         app:layout_constraintEnd_toEndOf="parent"
         />
 

@@ -12,8 +12,12 @@ import android.widget.ListAdapter;
 import com.campper.coursework.model.Card;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 
 public class GridViewAdapter implements ListAdapter {
+    private AtomicInteger atomicIncrement = new AtomicInteger(0);
+    AtomicIntegerArray atomicIntEqualCardsArray = new AtomicIntegerArray(2);
     private Context context;
     private ArrayList<Card> cardsArrayList;
 
@@ -39,7 +43,6 @@ public class GridViewAdapter implements ListAdapter {
 
     @Override
     public void unregisterDataSetObserver(DataSetObserver observer) {
-
     }
 
     @Override
@@ -49,7 +52,7 @@ public class GridViewAdapter implements ListAdapter {
 
     @Override
     public Object getItem(int position) {
-        return cardsArrayList.get(position);
+        return cardsArrayList.get(position).getCardFrontImageId();
     }
 
     @Override
@@ -62,14 +65,30 @@ public class GridViewAdapter implements ListAdapter {
         return false;
     }
 
+     ArrayList<ImageView> imageList = new ArrayList<>();
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        if (convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.grid_view_item,
                     parent, false);
         }
 
-        return convertView;
+        final ImageView imageView = convertView.findViewById(R.id.grid_view_item_img);
+
+
+        convertView.setOnClickListener((View v) -> {
+            imageView.setImageResource(cardsArrayList.get(position).getCardFrontImageId());
+            imageList.add(imageView);
+
+            atomicIncrement.getAndIncrement();
+            Log.d("atomicInt", ""+atomicIncrement.get());
+            if(atomicIncrement.get() > 1){
+                imageList.get(0).setVisibility(View.INVISIBLE);
+            }
+        });
+
+    return convertView;
     }
 
     @Override

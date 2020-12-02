@@ -2,6 +2,7 @@ package com.campper.coursework;
 
 import android.app.Activity;
 import android.content.pm.ActivityInfo;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,10 +11,12 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.campper.coursework.model.Card;
+import com.campper.coursework.model.Fruits;
 
 import java.util.ArrayList;
 
 public class GameActivity extends Activity {
+    private MediaPlayer mediaPlayerBackgroundMusic;
     private GridView gridView;
     private GridViewAdapter gridViewAdapter;
     private ArrayList<Card> cardBackList;
@@ -29,6 +32,9 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
 
         setupFields();
+        setupCardList();
+
+        startMediaPlayerBackgroundMusic();
 
         setupGridView();
     }
@@ -36,11 +42,32 @@ public class GameActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
+
+        startMediaPlayerBackgroundMusic();
+        Log.d("onREsume:","onResume GameActivtiy");
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+        pauseMediaPlayerBackgroundMusic();
+        Log.d("onPause:", "onPause Game Activite");
     }
 
     @Override
     protected void onStop() {
         super.onStop();
+
+        releaseMediaPlayer();
+        Log.d("onStop:","onStop GameActivity");
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
+        Log.d("onDestroy:","onDestroy Game ACtivity");
     }
 
     public void setupGridView(){
@@ -52,13 +79,39 @@ public class GameActivity extends Activity {
 
     public void setupFields(){
         cardBackList = new ArrayList<Card>();
-        cardBackList.add(new Card(R.drawable.ic_card_back, Card.STRAWBERRY));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Card.APPLE));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Card.BERRY));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Card.LEMON));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Card.ORANGE));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Card.MANGO));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Card.GRAPES));
-    };
+    }
 
+    private void setupCardList(){
+        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.APPLE));
+        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.APPLE));
+        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.LIME));
+        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.LEMON));
+        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.STRAWBERRY));
+        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.ORANGE));
+        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.MANGO));
+    }
+
+    public void startMediaPlayerBackgroundMusic(){
+        if(mediaPlayerBackgroundMusic == null) {
+            mediaPlayerBackgroundMusic = MediaPlayer.create(this, R.raw.zakazzz);
+
+            mediaPlayerBackgroundMusic.start();
+            mediaPlayerBackgroundMusic.setLooping(true);
+        } else {
+            mediaPlayerBackgroundMusic.start();
+        }
+    }
+
+    public void pauseMediaPlayerBackgroundMusic(){
+        if(mediaPlayerBackgroundMusic != null) {
+            mediaPlayerBackgroundMusic.pause();
+        }
+    }
+
+    public void releaseMediaPlayer(){
+        if(mediaPlayerBackgroundMusic != null){
+            mediaPlayerBackgroundMusic.release();
+            mediaPlayerBackgroundMusic = null;
+        }
+    }
 }

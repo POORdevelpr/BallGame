@@ -1,24 +1,36 @@
 package com.campper.coursework.model;
 
-import com.campper.coursework.R;
+import android.widget.ImageView;
 
 public class Card {
+    private int position;
+    private String imageTag;
     private Fruits fruit;
 
-    private int cardBackImageId;
 
-
-
-    public Card(int backImageResource, Fruits fruit) {
-        this.cardBackImageId = backImageResource;
+    public Card(Fruits fruit, String imageTag) {
         this.fruit = fruit;
+        this.imageTag = imageTag;
     }
 
-    public int getCardBackImageId() {
-        return cardBackImageId;
-    }
 
     public int getCardFrontImageId() {
         return fruit.getImgResource();
+    }
+
+    public String getImageTag(){
+        return imageTag;
+    }
+
+    public void setImageTag(String imageTag){
+        this.imageTag = imageTag;
+    }
+
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
     }
 }

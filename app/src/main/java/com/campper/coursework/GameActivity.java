@@ -14,8 +14,13 @@ import com.campper.coursework.model.Card;
 import com.campper.coursework.model.Fruits;
 
 import java.util.ArrayList;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameActivity extends Activity {
+    private AtomicBoolean easy = new AtomicBoolean(false);
+    private AtomicBoolean medium = new AtomicBoolean(false);
+    private AtomicBoolean hard = new AtomicBoolean(false);
+
     private MediaPlayer mediaPlayerBackgroundMusic;
     private GridView gridView;
     private GridViewAdapter gridViewAdapter;
@@ -67,7 +72,7 @@ public class GameActivity extends Activity {
     protected void onDestroy() {
         super.onDestroy();
 
-        Log.d("onDestroy:","onDestroy Game ACtivity");
+        Log.d("onDestroy:","onDestroy Game Activity");
     }
 
     public void setupGridView(){
@@ -82,19 +87,41 @@ public class GameActivity extends Activity {
     }
 
     private void setupCardList(){
-        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.APPLE));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.APPLE));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.LIME));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.LEMON));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.STRAWBERRY));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.ORANGE));
-        cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.MANGO));
+        cardBackList.add(new Card(Fruits.APPLE,"apple"));
+        cardBackList.add(new Card(Fruits.APPLE, "apple"));
+        cardBackList.add(new Card(Fruits.LIME, "lime"));
+        cardBackList.add(new Card(Fruits.LEMON, "lemon"));
+        cardBackList.add(new Card(Fruits.STRAWBERRY, "strawberry"));
+        cardBackList.add(new Card(Fruits.ORANGE, "orange"));
+
+
+        //cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.MANGO, "mango"));
+    }
+
+    // levels -> Easy || Medium || Hard
+
+    public void easyLevel(){
+
+        for(int i=0; i<6; i++){
+            //cardBackList.add(new Card(R.drawable.ic_card_back), )
+        }
+    }
+
+    public void mediumLevel(){
+        for(int i=0; i<9; i++){
+
+        }
+    }
+
+    public void hardLevel(){
+        for(int i=0; i<12; i++){
+
+        }
     }
 
     public void startMediaPlayerBackgroundMusic(){
         if(mediaPlayerBackgroundMusic == null) {
-            mediaPlayerBackgroundMusic = MediaPlayer.create(this, R.raw.zakazzz);
-
+            mediaPlayerBackgroundMusic = MediaPlayer.create(this, R.raw.game_background);
             mediaPlayerBackgroundMusic.start();
             mediaPlayerBackgroundMusic.setLooping(true);
         } else {

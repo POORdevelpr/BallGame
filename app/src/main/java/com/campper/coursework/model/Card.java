@@ -8,9 +8,9 @@ public class Card {
     private Fruits fruit;
 
 
-    public Card(Fruits fruit, String imageTag) {
+    public Card(Fruits fruit) {
         this.fruit = fruit;
-        this.imageTag = imageTag;
+        imageTag = fruit.getFruitTag();
     }
 
 

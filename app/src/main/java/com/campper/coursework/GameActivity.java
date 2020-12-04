@@ -9,14 +9,18 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.campper.coursework.model.Card;
 import com.campper.coursework.model.Fruits;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameActivity extends Activity {
+    private TextView textScore;
     private AtomicBoolean easy = new AtomicBoolean(false);
     private AtomicBoolean medium = new AtomicBoolean(false);
     private AtomicBoolean hard = new AtomicBoolean(false);
@@ -36,12 +40,13 @@ public class GameActivity extends Activity {
 
         setContentView(R.layout.activity_game);
 
+
         setupFields();
         setupCardList();
 
+        setupGridView();
         startMediaPlayerBackgroundMusic();
 
-        setupGridView();
     }
 
     @Override
@@ -77,47 +82,62 @@ public class GameActivity extends Activity {
 
     public void setupGridView(){
         gridView = findViewById(R.id.activity_game__grid_view);
-        gridViewAdapter = new GridViewAdapter(this, cardBackList);
+        gridViewAdapter = new GridViewAdapter(this, cardBackList, textScore);
         gridView.setAdapter(gridViewAdapter);
 
     }
 
     public void setupFields(){
         cardBackList = new ArrayList<Card>();
+        textScore = findViewById(R.id.activity_game__txt_score);
     }
 
     private void setupCardList(){
-        cardBackList.add(new Card(Fruits.APPLE,"apple"));
-        cardBackList.add(new Card(Fruits.APPLE, "apple"));
-        cardBackList.add(new Card(Fruits.LIME, "lime"));
-        cardBackList.add(new Card(Fruits.LEMON, "lemon"));
-        cardBackList.add(new Card(Fruits.STRAWBERRY, "strawberry"));
-        cardBackList.add(new Card(Fruits.ORANGE, "orange"));
 
-
-        //cardBackList.add(new Card(R.drawable.ic_card_back, Fruits.MANGO, "mango"));
+        //easyLevel();
+        mediumLevel();
+        //hardLevel();
     }
 
     // levels -> Easy || Medium || Hard
 
     public void easyLevel(){
-
-        for(int i=0; i<6; i++){
-            //cardBackList.add(new Card(R.drawable.ic_card_back), )
+        Fruits fruit;
+        for(int i=0; i<4; i++){
+            fruit = randomEnumItem(Fruits.class);
+            for(int j=0; j<2; j++) {
+                cardBackList.add(new Card(fruit));
+            }
         }
     }
 
-    public void mediumLevel(){
-        for(int i=0; i<9; i++){
-
+    public void mediumLevel() {
+        Fruits fruit;
+        for (int i = 0; i < 6; i++) {
+            fruit = randomEnumItem(Fruits.class);
+            for (int j = 0; j < 2; j++) {
+                cardBackList.add(new Card(fruit));
+            }
         }
     }
 
     public void hardLevel(){
-        for(int i=0; i<12; i++){
-
+        Fruits fruit;
+        for(int i=0; i<8; i++){
+            fruit = randomEnumItem(Fruits.class);
+            for(int j=0; j<2; j++){
+                cardBackList.add(new Card(fruit));
+            }
         }
     }
+
+    public static <T extends Enum<?>> T randomEnumItem(Class<T> tClass){
+        SecureRandom random = new SecureRandom();
+        int x = random.nextInt(tClass.getEnumConstants().length);
+        return tClass.getEnumConstants()[x];
+    }
+
+
 
     public void startMediaPlayerBackgroundMusic(){
         if(mediaPlayerBackgroundMusic == null) {

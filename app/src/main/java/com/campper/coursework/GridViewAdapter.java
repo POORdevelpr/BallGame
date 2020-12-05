@@ -1,6 +1,7 @@
 package com.campper.coursework;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.media.MediaPlayer;
 import android.util.Log;
@@ -16,13 +17,19 @@ import androidx.dynamicanimation.animation.SpringAnimation;
 import androidx.dynamicanimation.animation.SpringForce;
 
 import com.campper.coursework.model.Card;
+import com.campper.coursework.model.Fruits;
 
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class GridViewAdapter implements ListAdapter {
+    private int bestScore;
+
     private AtomicInteger atomicIntScore = new AtomicInteger(0);
+    private AtomicInteger atomicIntLevel;
+
     private TextView textScore;
     private SpringAnimation springAnimationWrongPrevious;
     private SpringAnimation springAnimationWrongCurrent;
@@ -38,10 +45,13 @@ public class GridViewAdapter implements ListAdapter {
     private ArrayList<Card> cardsArrayList;
     private ArrayList<Card> twoCardsList = new ArrayList<>(2);
 
-    public GridViewAdapter(Context context, ArrayList<Card> cardsArrayList, TextView textScore) {
+    public GridViewAdapter(Context context, ArrayList<Card> cardsArrayList,
+                           TextView textScore, int bestScore, AtomicInteger atomicIntLevel) {
         this.context = context;
         this.cardsArrayList = cardsArrayList;
         this.textScore = textScore;
+        this.bestScore = bestScore;
+        this.atomicIntLevel = atomicIntLevel;
     }
 
     @Override
@@ -85,7 +95,6 @@ public class GridViewAdapter implements ListAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         if (convertView == null) {
             convertView = LayoutInflater.from(context).inflate(R.layout.grid_view_item,
                     parent, false);
@@ -117,11 +126,15 @@ public class GridViewAdapter implements ListAdapter {
                             && twoCardsImage.get(1).getVisibility() != View.INVISIBLE)) {
 
                         startMediaPlayerSuccess();
+
                         atomicIntScore.addAndGet(2);
+                        atomicIntLevel.incrementAndGet();
+
                         textScore.setText("Score: " + atomicIntScore.get());
                         animationClickSuccessCards(twoCardsImage.get(0), twoCardsImage.get(1));
 
                         twoCardsImage.removeAll(twoCardsImage);
+
                     } else {
                         // If cards are wrong
                         animationClickWrongCards(twoCardsImage.get(0), twoCardsImage.get(1));
@@ -245,5 +258,4 @@ public class GridViewAdapter implements ListAdapter {
     public boolean isEmpty() {
         return cardsArrayList.isEmpty();
     }
-
 }

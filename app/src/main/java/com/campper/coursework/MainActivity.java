@@ -16,6 +16,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+    private int bestScore;
     private boolean isFragmentDisplayed = false;
     private static final String FRAGMENT_STATE = "fragment_state";
 

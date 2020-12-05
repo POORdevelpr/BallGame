@@ -1,17 +1,24 @@
 package com.campper.coursework;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
 
 public class MainActivity extends AppCompatActivity {
+    private boolean isFragmentDisplayed = false;
+    private static final String FRAGMENT_STATE = "fragment_state";
+
     private volatile boolean isBackgroundMusicMute;
 
     private MediaPlayer mediaPlayerBackgroundMusic;
@@ -21,6 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private Button buttonMusicOff;
     private Button buttonMusicOn;
     private Button buttonMenu;
+    private Button buttonAbout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +42,11 @@ public class MainActivity extends AppCompatActivity {
 
 
         setupButtons();
+
+        // CheckInstance
+        if(savedInstanceState != null){
+            isFragmentDisplayed = savedInstanceState.getBoolean(FRAGMENT_STATE);
+        }
         setupButtonListeners();
 
         Log.d("onCreate","OnCreate");
@@ -81,10 +94,7 @@ public class MainActivity extends AppCompatActivity {
         buttonMusicOff = findViewById(R.id.activity_main__btn_music_off);
         buttonMusicOn = findViewById(R.id.activity_main__btn_music_on);
         buttonMenu = findViewById(R.id.activity_main__btn_menu);
-    }
-
-    private void startGame(){
-        buttonStart.setOnClickListener(v -> onStartButtonClick());
+        buttonAbout = findViewById(R.id.activity_main__btn_about);
     }
 
     private void setupButtonListeners(){
@@ -92,6 +102,43 @@ public class MainActivity extends AppCompatActivity {
         buttonMusicOff.setOnClickListener(v -> onButtonMuteClick());
         buttonMusicOn.setOnClickListener(v -> onButtonMusicOnClick());
         buttonMenu.setOnClickListener(v -> onButtonMenuClick());
+        buttonAbout.setOnClickListener(v -> onButtonAboutClick());
+    }
+
+    private void onButtonAboutClick() {
+        startMediaPlayerClick();
+        if (!isFragmentDisplayed){
+           displayFragment();
+        } else {
+            closeFragment();
+        }
+    }
+
+    private void displayFragment() {
+        FragmentAbout fragment = FragmentAbout.newInstance();
+        // Get manager for current activity
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        // Commit -> start Schedule on Main thread
+        fragmentTransaction.add(R.id.activity_main__fragment_container, fragment).addToBackStack(FRAGMENT_STATE).commit();
+        buttonAbout.setText(R.string.btn_close);
+
+        isFragmentDisplayed = true;
+    }
+
+    private void closeFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        FragmentAbout fragmentAbout = (FragmentAbout)
+                fragmentManager.findFragmentById(R.id.activity_main__fragment_container);
+
+        if(fragmentAbout != null){
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(fragmentAbout).commit();
+        }
+        buttonAbout.setText(R.string.btn_open);
+        isFragmentDisplayed = false;
     }
 
     private void onStartButtonClick(){
@@ -160,4 +207,10 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        // true = open, false = closed
+        outPersistentState.putBoolean(FRAGMENT_STATE, isFragmentDisplayed);
+        super.onSaveInstanceState(outState, outPersistentState);
+    }
 }

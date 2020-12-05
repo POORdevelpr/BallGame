@@ -4,4 +4,12 @@
     <string name="btn_start">START</string>
     <string name="btn_menu">MENU</string>
     <string name="score">Score:</string>
+    <string name="game_over">Game Over</string>
+    <string name="btn_retry">Retry</string>
+    <string name="btn_mute">MUTE</string>
+    <string name="btn_music">MUSIC</string>
+    <string name="btn_about">ABOUT</string>
+    <string name="about">Hi everyone! My name is Denis, i\'m student in KHNADU on 3-rd course and this is my course work!</string>
+    <string name="btn_close">Close</string>
+    <string name="btn_open">Open</string>
 </resources>

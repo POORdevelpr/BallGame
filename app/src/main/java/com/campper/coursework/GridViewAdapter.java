@@ -99,7 +99,6 @@ public class GridViewAdapter implements ListAdapter {
 
 
         convertView.setOnClickListener((View v) -> {
-
             imageView.setImageResource(cardsArrayList.get(position).getCardFrontImageId());
 
             animationCardClick(imageView);
@@ -108,18 +107,18 @@ public class GridViewAdapter implements ListAdapter {
             twoCardsImage.add(imageView);
 
             // Check two cards
-            if(twoCardsList.size() > 1){
+            if(twoCardsList.size() > 1) {
                 // Check position if not same card
-                if(twoCardsList.get(0).getPosition() != twoCardsList.get(1).getPosition()){
+                if (twoCardsList.get(0).getPosition() != twoCardsList.get(1).getPosition()) {
 
                     // Check tag if success and Check visibility
-                    if ( twoCardsList.get(0).getImageTag()
-                            .equals(twoCardsList.get(1).getImageTag())  && (twoCardsImage.get(0).getVisibility() != View.INVISIBLE
-                            && twoCardsImage.get(1).getVisibility() != View.INVISIBLE) ){
+                    if (twoCardsList.get(0).getImageTag()
+                            .equals(twoCardsList.get(1).getImageTag()) && (twoCardsImage.get(0).getVisibility() != View.INVISIBLE
+                            && twoCardsImage.get(1).getVisibility() != View.INVISIBLE)) {
 
                         startMediaPlayerSuccess();
                         atomicIntScore.addAndGet(2);
-                        textScore.setText("Score: "+atomicIntScore.get());
+                        textScore.setText("Score: " + atomicIntScore.get());
                         animationClickSuccessCards(twoCardsImage.get(0), twoCardsImage.get(1));
 
                         twoCardsImage.removeAll(twoCardsImage);
@@ -130,8 +129,15 @@ public class GridViewAdapter implements ListAdapter {
                         twoCardsImage.removeAll(twoCardsImage);
                     }
                 }
+                // If double click on same card - release all data
 
+                if(twoCardsList.get(0).getPosition() == twoCardsList.get(1).getPosition()){
+                    imageView.setImageResource(R.drawable.ic_card_back);
+                }
+
+                twoCardsImage.removeAll(twoCardsImage);
                 twoCardsList.removeAll(twoCardsList);
+
             }
 
         });

@@ -4,23 +4,46 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/orange"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/activity_main__btn_start"
+    <FrameLayout
+        android:id="@+id/activity_main__fragment_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout="@layout/fragment_about"
+        />
+
+    <TextView
+        android:id="@+id/activity_main__txt_best_score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="36sp"
+        android:textColor="@color/black"
+        android:text="@string/best_score"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/activity_main_guide_line"
         />
 
     <Button
+        android:id="@+id/activity_main__btn_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_start"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_main__txt_best_score"
+        android:layout_marginTop="10dp"
+        />
+
+    <Button
         android:id="@+id/activity_main__btn_menu"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Menu"
+        android:text="@string/btn_menu"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/activity_main__btn_start"
@@ -30,20 +53,31 @@
         android:id="@+id/activity_main__btn_music_off"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Mute"
-        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/btn_mute"
+        app:layout_constraintStart_toEndOf="@id/activity_main__btn_music_on"
         app:layout_constraintTop_toBottomOf="@id/activity_main__btn_menu"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginStart="20dp"
         />
 
     <Button
         android:id="@+id/activity_main__btn_music_on"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Music"
+        android:text="@string/btn_music"
+        app:layout_constraintStart_toStartOf="@id/activity_main_guide_line_start"
+        app:layout_constraintTop_toBottomOf="@+id/activity_main__btn_menu"
+        android:layout_marginStart="25dp"
+
+        />
+
+    <Button
+        android:id="@+id/activity_main__btn_about"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_about"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/activity_main__btn_music_off"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/activity_main__btn_music_on"
         />
 
     <androidx.constraintlayout.widget.Guideline
@@ -52,6 +86,22 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.2"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/activity_main_guide_line_start"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.2"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/activity_main_guide_line_end"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.8"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

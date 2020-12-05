@@ -4,11 +4,14 @@ import android.app.Activity;
 import android.content.pm.ActivityInfo;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Chronometer;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.campper.coursework.model.Card;
@@ -20,6 +23,9 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameActivity extends Activity {
+    private static final long START_DURATION_PROGRESS_BAR = 10_000; // Ten seconds
+    private static final long ADDITIONAL_TIME_PROGRESS = 5000;
+    private ProgressBar progressBar;
     private TextView textScore;
     private AtomicBoolean easy = new AtomicBoolean(false);
     private AtomicBoolean medium = new AtomicBoolean(false);
@@ -85,18 +91,22 @@ public class GameActivity extends Activity {
         gridViewAdapter = new GridViewAdapter(this, cardBackList, textScore);
         gridView.setAdapter(gridViewAdapter);
 
+        Log.d("time", " "+SystemClock.elapsedRealtime());
     }
 
     public void setupFields(){
         cardBackList = new ArrayList<Card>();
         textScore = findViewById(R.id.activity_game__txt_score);
+        progressBar = findViewById(R.id.activity_game__progress_bar);
+
+
     }
 
     private void setupCardList(){
 
         //easyLevel();
-        mediumLevel();
-        //hardLevel();
+        //mediumLevel();
+        hardLevel();
     }
 
     // levels -> Easy || Medium || Hard

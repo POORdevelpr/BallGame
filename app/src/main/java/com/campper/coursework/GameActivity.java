@@ -1,6 +1,5 @@
 package com.campper.coursework;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,13 +8,21 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 
+import android.os.PersistableBundle;
 import android.util.Log;
 import android.view.WindowManager;
 import android.view.animation.LinearInterpolator;
+import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.ViewModelProvider;
 
 import com.campper.coursework.model.Card;
 import com.campper.coursework.model.Fruits;
@@ -26,7 +33,12 @@ import java.util.Collections;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class GameActivity extends Activity {
+public class GameActivity extends AppCompatActivity {
+    private ItemViewModelFragmentGame viewModel;
+
+    private static final String FRAGMENT_GAME_STATE = "fragment_game_state";
+    private boolean isFragmentDisplayed = false;
+
     private CountDownTimer countDownTimer;
 
     private static final String KEY_BEST_SCORE = "best_score";
@@ -42,14 +54,17 @@ public class GameActivity extends Activity {
 
     private ProgressBar progressBar;
     private AtomicInteger atomicIntLevel = new AtomicInteger(0);
-    private AtomicBoolean easy = new AtomicBoolean(false);
-    private AtomicBoolean medium = new AtomicBoolean(false);
-    private AtomicBoolean hard = new AtomicBoolean(false);
 
     private MediaPlayer mediaPlayerBackgroundMusic;
     private GridView gridView;
     private GridViewAdapter gridViewAdapter;
     private ArrayList<Card> cardBackList;
+
+    private Button btnEasyLevel;
+    private Button btnMediumLevel;
+    private Button btnHardLevel;
+    private Button btnMuteMusic;
+    private Button btnPlayMusic;
 
 
     @Override
@@ -66,14 +81,27 @@ public class GameActivity extends Activity {
         setupSharedPref();
         setupEditPref();
         setupCardList();
-
-        setupTimer();
         setupGridView();
+
         startMediaPlayerBackgroundMusic();
 
-        if(atomicIntLevel.get() == 4){
-            
-        }
+    }
+
+    private void onClickButtonEasy() {
+        setupCardList();
+        easyLevel();
+
+        setupGridView();
+
+        closeFragment();
+    }
+
+    private void onClickButtonPlayMusic() {
+        startMediaPlayerBackgroundMusic();
+    }
+
+    private void onClickButtonMute() {
+        pauseMediaPlayerBackgroundMusic();
     }
 
     @Override
@@ -109,7 +137,7 @@ public class GameActivity extends Activity {
 
     public void setupGridView() {
         gridView = findViewById(R.id.activity_game__grid_view);
-        gridViewAdapter = new GridViewAdapter(this, cardBackList, textScore, bestScore, atomicIntLevel);
+        gridViewAdapter = new GridViewAdapter(this, cardBackList, textScore, bestScore, atomicIntLevel, gridView);
         gridView.setAdapter(gridViewAdapter);
 
     }
@@ -125,9 +153,34 @@ public class GameActivity extends Activity {
 
     private void setupCardList() {
 
-        easyLevel();
+       easyLevel();
         //mediumLevel();
         //hardLevel();
+    }
+
+    private void setupFragment(){
+        FragmentGame fragmentGame = new FragmentGame();
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.add(R.id.activity_game__fragment_container, fragmentGame).addToBackStack(FRAGMENT_GAME_STATE).commit();
+
+        isFragmentDisplayed = true;
+
+        Log.d("viewFragment",""+fragmentGame.getAnotherView());
+    }
+
+    private void closeFragment(){
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentGame fragmentGame = (FragmentGame)fragmentManager
+                .findFragmentById(R.id.activity_game__fragment_container);
+
+        if(fragmentGame != null){
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            fragmentTransaction.remove(fragmentGame).commit();
+        }
+
+        isFragmentDisplayed = false;
     }
 
     // levels -> Easy || Medium || Hard
@@ -152,6 +205,8 @@ public class GameActivity extends Activity {
                 cardBackList.add(new Card(fruit));
             }
         }
+
+        Collections.shuffle(cardBackList);
     }
 
     public void hardLevel() {
@@ -162,6 +217,8 @@ public class GameActivity extends Activity {
                 cardBackList.add(new Card(fruit));
             }
         }
+
+        Collections.shuffle(cardBackList);
     }
 
     public static <T extends Enum<?>> T randomEnumItem(Class<T> tClass) {
@@ -232,5 +289,11 @@ public class GameActivity extends Activity {
     public void gameOver() {
         Intent intent = new Intent(this, GameOverActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState, @NonNull PersistableBundle outPersistentState) {
+        outState.putBoolean(FRAGMENT_GAME_STATE, isFragmentDisplayed);
+        super.onSaveInstanceState(outState, outPersistentState);
     }
 }

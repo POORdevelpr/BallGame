@@ -2,15 +2,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.campper.coursework">
 
-    <uses-permission android:name="android.permission.INTERNET">
-
-    </uses-permission>
-
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_mango"
+        android:icon="@mipmap/ic_launcher_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_mango_round"
+        android:roundIcon="@mipmap/ic_launcher_icon_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 

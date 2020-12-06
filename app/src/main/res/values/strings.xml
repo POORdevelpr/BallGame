@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">CourseWork</string>
+    <string name="app_name">Memory Training: cards</string>
     <string name="best_score">Best score:</string>
     <string name="btn_start">START</string>
     <string name="btn_menu">MENU</string>
@@ -12,4 +12,9 @@
     <string name="about">Hi everyone! My name is Denis, i\'m student in KHNADU on 3-rd course and this is my course work!</string>
     <string name="btn_close">Close</string>
     <string name="btn_open">Open</string>
+    <string name="btn_easy_lv">Easy</string>
+    <string name="btn_easy_lvl">Easy</string>
+    <string name="btn_medium_lvl">Medium</string>
+    <string name="choose_lvl">Choose Level</string>
+    <string name="btn_hard_lvl">Hard</string>
 </resources>

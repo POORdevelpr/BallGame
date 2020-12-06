@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/orange"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/fragment_game__txt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/choose_lvl"
+        android:textSize="24sp"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toTopOf="@id/fragment_game_guide_line_top"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
+    <Button
+        android:id="@+id/fragment_game__btn_easy_lvl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_easy_lvl"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_game__txt"
+        android:layout_marginTop="20dp"
+        />
+
+    <Button
+        android:id="@+id/fragment_game__btn_medium_lvl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_medium_lvl"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_game__btn_easy_lvl"
+        />
+
+    <Button
+        android:id="@+id/fragment_game__btn_hard_lvl"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_hard_lvl"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/fragment_game__btn_medium_lvl"
+        />
+
+    <Button
+        android:id="@+id/fragment_game__btn_mute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_mute"
+        app:layout_constraintStart_toStartOf="@id/fragment_game_guide_line_vertical_half"
+        app:layout_constraintTop_toBottomOf="@id/fragment_game__btn_hard_lvl"
+        android:layout_marginStart="10dp"
+        />
+
+    <Button
+        android:id="@+id/fragment_game__btn_music_play"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/btn_music"
+        app:layout_constraintEnd_toStartOf="@id/fragment_game_guide_line_vertical_half"
+        app:layout_constraintTop_toBottomOf="@id/fragment_game__btn_hard_lvl"
+        android:layout_marginEnd="10dp"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fragment_game_guide_line_top"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.15"
+        />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/fragment_game_guide_line_vertical_half"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"
+        />
+</androidx.constraintlayout.widget.ConstraintLayout>

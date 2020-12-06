@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.database.DataSetObserver;
 import android.media.MediaPlayer;
+import android.os.CountDownTimer;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ListAdapter;
 import android.widget.TextView;
@@ -21,14 +23,23 @@ import com.campper.coursework.model.Fruits;
 
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
 
 public class GridViewAdapter implements ListAdapter {
+    private GridView gridView;
+    private CountDownTimer countDownTimer;
     private int bestScore;
 
-    private AtomicInteger atomicIntScore = new AtomicInteger(0);
+    private AtomicInteger atomicIntScore = new AtomicInteger();
     private AtomicInteger atomicIntLevel;
+    private AtomicInteger atomicHardLevelRepeat = new AtomicInteger(0);
+    private AtomicBoolean easy = new AtomicBoolean(false);
+    private AtomicBoolean medium = new AtomicBoolean(false);
+    private AtomicBoolean hard = new AtomicBoolean(false);
+
 
     private TextView textScore;
     private SpringAnimation springAnimationWrongPrevious;
@@ -46,12 +57,14 @@ public class GridViewAdapter implements ListAdapter {
     private ArrayList<Card> twoCardsList = new ArrayList<>(2);
 
     public GridViewAdapter(Context context, ArrayList<Card> cardsArrayList,
-                           TextView textScore, int bestScore, AtomicInteger atomicIntLevel) {
+                           TextView textScore, int bestScore, AtomicInteger atomicIntLevel, GridView gridView) {
         this.context = context;
         this.cardsArrayList = cardsArrayList;
         this.textScore = textScore;
         this.bestScore = bestScore;
         this.atomicIntLevel = atomicIntLevel;
+        atomicIntScore.set(atomicIntLevel.get() * 2);
+        this.gridView = gridView;
     }
 
     @Override
@@ -135,6 +148,26 @@ public class GridViewAdapter implements ListAdapter {
 
                         twoCardsImage.removeAll(twoCardsImage);
 
+                        atomicHardLevelRepeat.incrementAndGet();
+                        // Hard level
+                        if( (atomicIntLevel.get() == 10)){
+                            Log.d("hard", "true");
+                            hard.set(true);
+                            easy.set(false);
+                            medium.set(false);
+                            atomicHardLevelRepeat.set(8);
+                        }
+                        repeatHardLevel(); // After case Hard level
+
+                        // Medium level
+                        if(atomicIntLevel.get() == 4){
+                            easy.set(false);
+                            hard.set(false);
+                            medium.set(true);
+                            resetView();
+                        }
+
+
                     } else {
                         // If cards are wrong
                         animationClickWrongCards(twoCardsImage.get(0), twoCardsImage.get(1));
@@ -156,6 +189,34 @@ public class GridViewAdapter implements ListAdapter {
         });
 
         return convertView;
+    }
+
+    private void repeatHardLevel() {
+        if (atomicHardLevelRepeat.get() % 8 == 0) {
+            atomicHardLevelRepeat.set(0);
+            gridView.setAdapter(null);
+            cardsArrayList.clear();
+            atomicIntScore.get();
+
+            hardLevel();
+            gridView.setAdapter(new GridViewAdapter(context, cardsArrayList, textScore, bestScore, atomicIntLevel, gridView));
+        }
+
+
+    }
+
+    public void resetView(){
+        gridView.setAdapter(null);
+        cardsArrayList.clear();
+        atomicIntScore.get();
+        // If hard level true else medium
+        if(hard.get()) {
+            hardLevel();
+            gridView.setAdapter(new GridViewAdapter(context, cardsArrayList, textScore, bestScore, atomicIntLevel, gridView));
+        } else if(medium.get()){
+            mediumLevel();
+            gridView.setAdapter(new GridViewAdapter(context, cardsArrayList, textScore, bestScore, atomicIntLevel, gridView));
+        }
     }
 
     public void animationCardClick(ImageView imageView){
@@ -257,5 +318,47 @@ public class GridViewAdapter implements ListAdapter {
     @Override
     public boolean isEmpty() {
         return cardsArrayList.isEmpty();
+    }
+
+
+    public void easyLevel() {
+        Fruits fruit;
+        for (int i = 0; i < 4; i++) {
+            fruit = randomEnumItem(Fruits.class);
+            for (int j = 0; j < 2; j++) {
+                cardsArrayList.add(new Card(fruit));
+            }
+        }
+
+        Collections.shuffle(cardsArrayList);
+    }
+
+    public void mediumLevel() {
+        Fruits fruit;
+        for (int i = 0; i < 6; i++) {
+            fruit = randomEnumItem(Fruits.class);
+            for (int j = 0; j < 2; j++) {
+                cardsArrayList.add(new Card(fruit));
+            }
+        }
+        Collections.shuffle(cardsArrayList);
+    }
+
+    public void hardLevel() {
+        Fruits fruit;
+        for (int i = 0; i < 8; i++) {
+            fruit = randomEnumItem(Fruits.class);
+            for (int j = 0; j < 2; j++) {
+                cardsArrayList.add(new Card(fruit));
+            }
+        }
+
+        Collections.shuffle(cardsArrayList);
+    }
+
+    public static <T extends Enum<?>> T randomEnumItem(Class<T> tClass) {
+        SecureRandom random = new SecureRandom();
+        int x = random.nextInt(tClass.getEnumConstants().length);
+        return tClass.getEnumConstants()[x];
     }
 }
